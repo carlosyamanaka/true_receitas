@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:true_receitas/models/meal.dart';
 
-class MealDetailSreen extends StatelessWidget {
+class MealDetailScreen extends StatelessWidget {
+  final Function(Meal) onToggleFavorite;
+  final bool Function(Meal) isFavorite;
+
+  const MealDetailScreen(this.onToggleFavorite, this.isFavorite, {super.key});
+
   Widget _createSectionTitle(BuildContext context, String title) {
     return Container(
       margin: const EdgeInsets.symmetric(
@@ -29,14 +34,14 @@ class MealDetailSreen extends StatelessWidget {
     );
   }
 
-  const MealDetailSreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     final meal = ModalRoute.of(context)?.settings.arguments as Meal;
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Colors.white,
         title: Text(meal.title),
       ),
       body: SingleChildScrollView(
@@ -89,6 +94,12 @@ class MealDetailSreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          onToggleFavorite(meal);
+        },
+        child: Icon(isFavorite(meal) ? Icons.star : Icons.star_border),
       ),
     );
   }

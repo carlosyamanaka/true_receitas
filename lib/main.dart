@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:true_receitas/data/dummy_data.dart';
+import 'package:true_receitas/models/meal.dart';
+import 'package:true_receitas/models/settings.dart';
 import 'package:true_receitas/screens/categories_meals_screen.dart';
 import 'package:true_receitas/screens/categories_screen.dart';
 import 'package:true_receitas/screens/meal_detail_screen.dart';
+import 'package:true_receitas/screens/settings_screen.dart';
 import 'package:true_receitas/screens/tabs_screen.dart';
 import './utils/app_routes.dart';
 
@@ -9,8 +13,46 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Settings settings = Settings();
+  List<Meal> _avaliableMeals = dummyMeals;
+  final List<Meal> _favoriteMeals = [];
+
+  void _filterMeals(Settings settings) {
+    setState(() {
+      this.settings = settings;
+      _avaliableMeals = dummyMeals.where((meal) {
+        final filterGluten = settings.isGlutenFree && !meal.isGlutenFree;
+        final filterLactose = settings.isLactoseFree && !meal.isLactoseFree;
+        final filterVegan = settings.isVegan && !meal.isVegan;
+        final filterVegetarian = settings.isVegetarian && !meal.isVegetarian;
+
+        return !filterGluten &&
+            !filterLactose &&
+            !filterVegan &&
+            !filterVegetarian;
+      }).toList();
+    });
+  }
+
+  void _toggleFavorite(Meal meal) {
+    setState(() {
+      _favoriteMeals.contains(meal)
+          ? _favoriteMeals.remove(meal)
+          : _favoriteMeals.add(meal);
+    });
+  }
+
+  bool isFavorite(Meal meal) {
+    return _favoriteMeals.contains(meal);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +77,13 @@ class MyApp extends StatelessWidget {
           ),
           canvasColor: const Color.fromRGBO(255, 254, 229, 1),
         ),
-        home: const CategoriesScreen(),
-        initialRoute: AppRoutes.HOME,
+        home: TabsScreen(_favoriteMeals),
         routes: {
-          AppRoutes.HOME: (ctx) => const TabsScreen(),
-          AppRoutes.CATEGORIES_MEALS: (ctx) => const CategoriesMealsScreen(),
-          AppRoutes.MEAL_DETAIL: (ctx) => const MealDetailSreen(),
+          AppRoutes.CATEGORIES_MEALS: (ctx) =>
+              CategoriesMealsScreen(_avaliableMeals),
+          AppRoutes.MEAL_DETAIL: (ctx) =>
+              MealDetailScreen(_toggleFavorite, isFavorite),
+          AppRoutes.SETTINGS: (ctx) => SettingsScreen(_filterMeals, settings),
         },
         onUnknownRoute: (settings) {
           return MaterialPageRoute(builder: (_) {
