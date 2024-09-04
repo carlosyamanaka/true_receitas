@@ -1,16 +1,26 @@
-# true_receitas
+# True Receitas
+True Receitas é um aplicativo de receitas desenvolvido em Flutter que permite explorar, filtrar e salvar receitas favoritas.
 
-A new Flutter project.
+## Funcionalidades
+Exploração por Categorias: Navegue por diferentes categorias de receitas.
+Filtragem Personalizada: Filtre receitas de acordo com preferências alimentares (sem glúten, sem lactose, veganas, vegetarianas).
+Favoritos: Salve suas receitas favoritas para fácil acesso.
 
-## Getting Started
+## Estrutura do Projeto
+main.dart: Configuração inicial do aplicativo.
+TabsScreen: Tela com navegação entre categorias e receitas favoritas.
+screens/: Telas principais, como categorias, detalhes da receita, e favoritos.
+models/: Modelos de dados para refeições e configurações.
+data/: Dados fictícios utilizados no aplicativo.
+## Como Executar
+Clone o repositório:
+`git clone https://github.com/usuario/true_receitas.git`
 
-This project is a starting point for a Flutter application.
+Instale as dependências:
+`flutter pub get`
 
-A few resources to get you started if this is your first Flutter project:
+Execute o aplicativo:
+`flutter run`
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Licença
+Este projeto está sob a Licença MIT.
